@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { LoginPage } from "../pages/auth/LoginPage";
 import { SignupPage } from "../pages/auth/SignupPage";
-import { TodoApp } from "../pages/todos/TodoApp";
+import { TodoPage } from "../pages/todos/TodoPage";
 import { LocalStorageService } from "../storage/services/storage.service";
 import { RootLayout } from "../components/layouts/RootLayout";
 import { ROUTES } from "./const/routes.const";
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <TodoApp />,
+        element: <TodoPage />,
         loader: async () => {
           const token = storage.get("token");
           if (!token) {

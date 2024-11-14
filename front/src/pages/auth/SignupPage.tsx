@@ -64,7 +64,7 @@ export const SignupPage = () => {
           <button
             type="submit"
             disabled={isValid === false}
-            className="mt-[30px] disabled:bg-[rgba(0,0,0,0.1)] disabled:border-0 disabled:text-[white] "
+            className="mt-[30px] disabled:bg-[rgba(0,0,0,0.1)] disabled:border-0 disabled:text-[white]"
           >
             submit
           </button>
