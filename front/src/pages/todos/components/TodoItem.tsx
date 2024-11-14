@@ -29,11 +29,12 @@ export const TodoItem = ({ todo, idx }: { todo: Todo; idx: number }) => {
     <li className="flex gap-[10px] justify-start items-center">
       <span>{idx + 1}. </span>
       {isEditMode ? (
-        <TodoEditForm register={register} />
+        <TodoFormItems register={register} />
       ) : (
         <TodoDisplay
           title={todo.title}
           content={todo.content}
+          priorty={todo.priority}
           onTitleClick={() => goToDetail(todo.id)}
         />
       )}
@@ -48,7 +49,7 @@ export const TodoItem = ({ todo, idx }: { todo: Todo; idx: number }) => {
   );
 };
 
-const TodoEditForm = ({
+export const TodoFormItems = ({
   register,
 }: {
   register: UseFormRegister<TodoEditFormType>;
@@ -56,16 +57,23 @@ const TodoEditForm = ({
   <>
     <input type="text" placeholder="title" {...register("title")} />
     <input type="text" placeholder="content" {...register("content")} />
+    <select {...register("priority")}>
+      <option value="urgent">urgent</option>
+      <option value="normal">normal</option>
+      <option value="low">low</option>
+    </select>
   </>
 );
 
 const TodoDisplay = ({
   title,
   content,
+  priorty,
   onTitleClick,
 }: {
   title: string;
   content: string;
+  priorty: string;
   onTitleClick: () => void;
 }) => (
   <>
@@ -73,6 +81,7 @@ const TodoDisplay = ({
       {title}
     </span>
     <span>{content}</span>
+    <span>{priorty}</span>
   </>
 );
 
