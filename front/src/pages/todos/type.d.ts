@@ -13,3 +13,5 @@ type UpdateTodoRequest = Pick<Todo, "id" | "title" | "content">;
 type ApiResponse<T> = {
   data: T;
 };
+
+type TodoEditFormType = CreateTodoRequest;
