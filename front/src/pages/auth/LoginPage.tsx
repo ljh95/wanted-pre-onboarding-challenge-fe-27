@@ -1,22 +1,76 @@
-import React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useAuth } from "./hooks/useAuth";
 
-/**
- * /auth 경로에 로그인 / 회원가입 기능을 개발합니다
-로그인, 회원가입을 별도의 경로로 분리해도 무방합니다
+interface LoginForm {
+  email: string;
+  password: string;
+}
 
-최소한 이메일, 비밀번호 input, 제출 button을 갖도록 구성해주세요
-
-이메일과 비밀번호의 유효성을 확인합니다
- 이메일 조건 : 최소 @, . 포함
- 비밀번호 조건 : 8자 이상 입력
- 이메일과 비밀번호가 모두 입력되어 있고, 조건을 만족해야 제출 버튼이 활성화 되도록 해주세요
-로그인 API를 호출하고, 올바른 응답을 받았을 때 루트 경로로 이동시켜주세요
- 응답으로 받은 토큰은 로컬 스토리지에 저장해주세요
- 다음 번에 로그인 시 토큰이 존재한다면 루트 경로로 리다이렉트 시켜주세요
- 어떤 경우든 토큰이 유효하지 않다면 사용자에게 알리고 로그인 페이지로 리다이렉트 시켜주세요
-
- */
+const schema = z.object({
+  email: z
+    .string()
+    .includes("@", { message: "이메일 형식이 올바르지 않습니다." })
+    .includes(".", { message: "이메일 형식이 올바르지 않습니다." }),
+  password: z.string().min(8, { message: "비밀번호는 8자 이상 입력해주세요." }),
+});
 
 export const LoginPage = () => {
-  return <div>LoginPage</div>;
+  const {
+    register,
+    formState: { errors, isValid },
+    handleSubmit,
+  } = useForm<LoginForm>({
+    mode: "onChange",
+    resolver: zodResolver(schema),
+  });
+
+  const { authController } = useAuth();
+
+  const onSubmit = handleSubmit(async (e) => {
+    await authController.handleLogin(e);
+  });
+
+  return (
+    <div>
+      <h2 className="mb-[40px]">LoginPage</h2>
+
+      <form onSubmit={onSubmit} className="flex flex-col gap-[20px]">
+        <div>
+          <label htmlFor="email">
+            email:
+            <input
+              type="email"
+              {...register("email")}
+              placeholder="email@aaa.com"
+            />
+          </label>
+          {errors.email && <p>{errors.email.message}</p>}
+        </div>
+
+        <div>
+          <label htmlFor="password">
+            password:
+            <input
+              type="password"
+              {...register("password")}
+              placeholder="password"
+            />
+          </label>
+          {errors.password && <p>{errors.password.message}</p>}
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            disabled={isValid === false}
+            className="mt-[30px] disabled:bg-[rgba(0,0,0,0.1)] disabled:border-0 disabled:text-[white] "
+          >
+            submit
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 };

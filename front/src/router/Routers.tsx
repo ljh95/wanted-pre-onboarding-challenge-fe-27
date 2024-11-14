@@ -1,27 +1,62 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
 import { LoginPage } from "../pages/auth/LoginPage";
 import { SignupPage } from "../pages/auth/SignupPage";
+import { TodoApp } from "../pages/todos/TodoApp";
+import { LocalStorageService } from "../storage/services/storage.service";
+import { RootLayout } from "../components/layouts/RootLayout";
+import { ROUTES } from "./const/routes.const";
 
+const storage = LocalStorageService.getInstance();
+
+// todo, 아마 loader 부분도 별도의 controller로 분리할 수 있을 것 같은데 나중에 해야겠다..
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <>this is todo page</>,
-  },
-  {
-    path: "/auth",
+    element: <RootLayout />,
     children: [
       {
-        path: "login",
-        element: <LoginPage />,
+        path: "/",
+        element: <TodoApp />,
+        loader: async () => {
+          const token = storage.get("token");
+          if (!token) {
+            return redirect(ROUTES.LOGIN);
+          }
+          return null;
+        },
       },
       {
-        path: "signup",
-        element: <SignupPage />,
+        path: "/auth",
+        children: [
+          {
+            path: "login",
+            element: <LoginPage />,
+            loader: async () => {
+              const token = storage.get("token");
+              if (token) {
+                return redirect(ROUTES.TODOS);
+              }
+              return null;
+            },
+          },
+          {
+            path: "signup",
+            element: <SignupPage />,
+            loader: async () => {
+              const token = storage.get("token");
+              if (token) {
+                return redirect(ROUTES.TODOS);
+              }
+              return null;
+            },
+          },
+        ],
       },
     ],
   },
-  // todo: add error boundary component
-  // todo: add not found page
 ]);
 
 export const Router = () => <RouterProvider router={router} />;
