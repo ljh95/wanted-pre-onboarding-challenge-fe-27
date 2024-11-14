@@ -4,6 +4,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTodoQuery } from "../hooks/useTodoQuery";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../router/const/routes.const";
 
 const schema = z.object({
   title: z.string().min(1, "title is required"),
@@ -48,6 +50,14 @@ export const TodoItem = ({ todo, idx }: { todo: Todo; idx: number }) => {
 
   const disabled = isEditMode ? !isValid : false;
 
+  const navigate = useNavigate();
+
+  const onClickItem = () => {
+    const searchParams = new URLSearchParams();
+    searchParams.append("id", todo.id);
+    navigate(`${ROUTES.TODOS}?${searchParams.toString()}`);
+  };
+
   return (
     <li key={todo.id} className="flex gap-[10px] justify-start items-center">
       <span>{idx + 1}. </span>
@@ -58,7 +68,12 @@ export const TodoItem = ({ todo, idx }: { todo: Todo; idx: number }) => {
         </>
       ) : (
         <>
-          <span>{todo.title}</span>
+          <span
+            onClick={onClickItem}
+            className="hover:font-bold cursor-pointer"
+          >
+            {todo.title}
+          </span>
           <span>{todo.content}</span>
         </>
       )}

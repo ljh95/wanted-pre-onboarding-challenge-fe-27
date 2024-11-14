@@ -11,14 +11,16 @@ export const useTodoQuery = () => {
       return useQuery({
         queryKey: TODO_QUERY_KEYS.lists(),
         queryFn: () => todoService.getTodoList(),
+        staleTime: 1000 * 60 * 5,
       });
     },
 
-    useGetTodoById: (id: string) => {
+    useGetTodoById: (id: string | null) => {
       return useQuery({
-        queryKey: TODO_QUERY_KEYS.detail(id),
-        queryFn: () => todoService.getTodoById(id),
+        queryKey: TODO_QUERY_KEYS.detail(id as string),
+        queryFn: () => todoService.getTodoById(id as string),
         enabled: !!id,
+        staleTime: 1000 * 60 * 5,
       });
     },
 
@@ -37,9 +39,12 @@ export const useTodoQuery = () => {
       return useMutation({
         mutationFn: (todo: UpdateTodoRequest) =>
           todoService.updateTodo(todo.id, todo),
-        onSuccess: () => {
+        onSuccess: (_, variables) => {
           queryClient.invalidateQueries({
             queryKey: TODO_QUERY_KEYS.lists(),
+          });
+          queryClient.invalidateQueries({
+            queryKey: TODO_QUERY_KEYS.detail(variables.id),
           });
         },
       });
