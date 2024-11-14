@@ -9,7 +9,6 @@ export const TodoDetail = () => {
 
   const { useGetTodoById } = useTodoQuery();
   const { data: todo } = useGetTodoById(todoId);
-  console.log(todo);
 
   if (!todo) return null;
 
@@ -18,9 +17,9 @@ export const TodoDetail = () => {
       <h2 className="text-[40px] font-bold mb-[40px]">TodoDetail</h2>
 
       <div className="flex flex-col items-start gap-[10px] mb-[40px]">
-        <span>{todo.title}</span>
-        <span>{todo.content}</span>
-        <span>{todo.priority}</span>
+        <span>title: {todo.title}</span>
+        <span>content: {todo.content}</span>
+        <span>priority: {todo.priority}</span>
 
         <p>createAt: {dayjs(todo.createdAt).format(DATE_FORMAT)}</p>
         <p>updateAt: {dayjs(todo.updatedAt).format(DATE_FORMAT)}</p>

@@ -42,7 +42,7 @@ export const TodoItem = ({ todo, idx }: { todo: Todo; idx: number }) => {
         isEditMode={isEditMode}
         onEditClick={handleEditClick}
         onCancelClick={cancelEdit}
-        isDisabled={!isValid}
+        isDisabled={isEditMode ? !isValid : false}
         todoId={todo.id}
       />
     </li>
@@ -99,7 +99,12 @@ const TodoActions = ({
   todoId: string;
 }) => (
   <>
-    <button type="button" onClick={onEditClick} disabled={isDisabled}>
+    <button
+      type="button"
+      onClick={onEditClick}
+      disabled={isDisabled}
+      className="disabled-btn"
+    >
       {isEditMode ? "Save" : "Edit"}
     </button>
     {isEditMode && <button onClick={onCancelClick}>Cancel</button>}
