@@ -18,3 +18,11 @@ type ApiResponse<T> = {
 };
 
 type TodoEditFormType = CreateTodoRequest;
+
+type TodoFilterType = {
+  sort?: "createdAt" | "updatedAt" | "priority" | "";
+  order?: "asc" | "desc" | "";
+  priorityFilter?: TodoPriority | "";
+  keyword?: string;
+  countOnly?: boolean;
+};

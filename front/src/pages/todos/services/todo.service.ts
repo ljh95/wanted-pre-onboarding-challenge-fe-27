@@ -12,9 +12,9 @@ export class TodoService {
   }
   private constructor() {}
 
-  public async getTodoList() {
+  public async getTodoList(params?: TodoFilterType) {
     try {
-      const response = await todoApi.getTodoList();
+      const response = await todoApi.getTodoList(params);
       return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError)
