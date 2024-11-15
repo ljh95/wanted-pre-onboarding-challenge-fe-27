@@ -9,7 +9,7 @@ export const DeleteTodoButton = ({ id }: { id: string }) => {
   };
 
   return (
-    <button onClick={handleDelete} type="button">
+    <button onClick={handleDelete} type="button" className="disabled-btn">
       Delete
     </button>
   );

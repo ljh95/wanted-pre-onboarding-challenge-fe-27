@@ -1,13 +1,8 @@
-import { useState } from "react";
-import { useTodoQuery } from "./useTodoQuery";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
-const schema = z.object({
-  title: z.string().min(1, "title is required"),
-  content: z.string().min(1, "content is required"),
-});
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { TODO_ITEM_SCHEMA } from "../const/todo.const";
+import { useTodoQuery } from "./useTodoQuery";
 
 export const useEditTodo = (todo: Todo) => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -15,13 +10,14 @@ export const useEditTodo = (todo: Todo) => {
   const { mutateAsync: updateTodo } = useUpdateTodo();
 
   const form = useForm<TodoEditFormType>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(TODO_ITEM_SCHEMA),
     mode: "onChange",
   });
 
   const startEdit = () => {
     form.setValue("title", todo.title);
     form.setValue("content", todo.content);
+    form.setValue("priority", todo.priority);
     setIsEditMode(true);
   };
 

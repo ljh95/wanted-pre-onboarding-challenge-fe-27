@@ -1,17 +1,8 @@
-import { z } from "zod";
-import { useTodoQuery } from "../hooks/useTodoQuery";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const schema = z.object({
-  title: z.string().min(1, "title is required"),
-  content: z.string().min(1, "content is required"),
-});
-
-type FormType = {
-  title: string;
-  content: string;
-};
+import { useForm } from "react-hook-form";
+import { TODO_ITEM_SCHEMA } from "../const/todo.const";
+import { useTodoQuery } from "../hooks/useTodoQuery";
+import { TodoFormItems } from "./TodoItem";
 
 export const CreateTodo = () => {
   const {
@@ -19,8 +10,8 @@ export const CreateTodo = () => {
     formState: { isValid },
     handleSubmit,
     reset,
-  } = useForm<FormType>({
-    resolver: zodResolver(schema),
+  } = useForm<CreateTodoRequest>({
+    resolver: zodResolver(TODO_ITEM_SCHEMA),
     mode: "onChange",
   });
 
@@ -37,8 +28,7 @@ export const CreateTodo = () => {
       className="flex gap-[20px] [&>input]:border [&>input]:rounded-[4px] [&>input]:p-[4px]"
       onSubmit={onSubmit}
     >
-      <input type="text" placeholder="title" {...register("title")} />
-      <input type="text" placeholder="content" {...register("content")} />
+      <TodoFormItems register={register} />
 
       <button
         type="submit"

@@ -1,7 +1,8 @@
 import apiClient from "../../../api/api";
 
 export const todoApi = {
-  getTodoList: () => apiClient.get<ApiResponse<Todo[]>>("/todos"),
+  getTodoList: (params?: TodoFilterType) =>
+    apiClient.get<ApiResponse<Todo[]>>("/todos", { params }),
   getTodoById: (id: string) => apiClient.get<ApiResponse<Todo>>(`/todos/${id}`),
   createTodo: (body: CreateTodoRequest) =>
     apiClient.post<ApiResponse<Todo>>("/todos", body),

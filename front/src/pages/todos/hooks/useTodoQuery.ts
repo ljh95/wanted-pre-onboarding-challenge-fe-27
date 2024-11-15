@@ -7,10 +7,10 @@ export const useTodoQuery = () => {
   const todoService = TodoService.getInstance();
 
   return {
-    useGetTodos: () => {
+    useGetTodos: (params?: TodoFilterType) => {
       return useQuery({
-        queryKey: TODO_QUERY_KEYS.lists(),
-        queryFn: () => todoService.getTodoList(),
+        queryKey: [...TODO_QUERY_KEYS.lists(), params],
+        queryFn: () => todoService.getTodoList(params),
         staleTime: 1000 * 60 * 5,
       });
     },
